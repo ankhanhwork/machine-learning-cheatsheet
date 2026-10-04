@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f6f8" />
+    <meta name="description" content="Thư viện tài liệu Advanced Business Analytics: machine learning, feature engineering và notebook thực hành." />
+    <title>ML Study Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="ML Study Library home"><span class="brand-icon">M</span><span>study<span class="brand-light">/ml</span></span></a>
+        <div class="sidebar-label">LIBRARY</div>
+        <button class="nav-item active" id="allDocs"><span class="nav-icon">▤</span> Tất cả tài liệu <span class="nav-count" id="docCount">0</span></button>
+        <div class="sidebar-label section-label">CHỦ ĐỀ</div>
+        <div id="folderNav" class="folder-nav"></div>
+        <div class="sidebar-bottom"><div class="status-dot"></div><span>Advanced Business Analytics</span></div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar"><div class="breadcrumb"><span>Thư viện</span><span class="crumb-sep">/</span><strong id="crumbCurrent">Tất cả tài liệu</strong></div><a class="github-link" href="https://github.com/ankhanhwork/machine-learning-cheatsheet" target="_blank" rel="noreferrer">GitHub <span>↗</span></a></header>
+        <section class="welcome" id="welcome">
+          <div class="eyebrow"><span></span> YOUR PERSONAL KNOWLEDGE BASE</div>
+          <h1>Học machine learning,<br /><em>theo cách của bạn.</em></h1>
+          <p class="welcome-copy">Ghi chú, hướng dẫn và notebook thực hành được gom gọn trong một nơi.</p>
+          <div class="welcome-meta"><span class="meta-icon">⌘</span><span id="welcomeCount">Đang tải thư viện…</span><span class="meta-divider">·</span><span>Luôn sẵn sàng để tra cứu</span></div>
+          <div class="welcome-orb orb-one"></div><div class="welcome-orb orb-two"></div>
+        </section>
+        <section class="content-section">
+          <div class="section-head"><div><div class="eyebrow small-eyebrow">KHÁM PHÁ</div><h2 id="sectionTitle">Tài liệu của bạn</h2></div><div class="toolbar"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Tìm tài liệu..." aria-label="Tìm tài liệu" /><kbd>/</kbd></label><select id="typeFilter" aria-label="Lọc loại tài liệu"><option value="all">Tất cả loại</option><option value="ipynb">Notebook</option><option value="md">Markdown</option><option value="other">Tệp tải về</option></select></div></div>
+          <div class="results-line"><span id="resultsCount"></span><span class="sort-label">Sắp xếp theo tên <span>⌄</span></span></div>
+          <div class="doc-grid" id="docGrid"></div>
+          <div class="empty-state" id="emptyState" hidden><div class="empty-icon">⌕</div><h3>Không tìm thấy tài liệu</h3><p>Thử một từ khóa khác hoặc chọn chủ đề khác.</p></div>
+        </section>
+        <footer>Made for curious minds <span>✳</span><span class="footer-right">ADVANCED BUSINESS ANALYTICS · 2026</span></footer>
+      </main>
+    </div>
+    <div class="reader" id="reader" aria-hidden="true"><div class="reader-backdrop" id="readerBackdrop"></div><section class="reader-panel"><div class="reader-top"><button class="back-button" id="closeReader">← <span>Thư viện</span></button><div class="reader-actions"><a id="downloadLink" class="download-button" download>↓ <span>Tải xuống</span></a><button class="close-button" id="closeIcon" aria-label="Đóng">×</button></div></div><div class="reader-title"><div class="doc-badge" id="readerBadge">MD</div><div><div class="reader-path" id="readerPath"></div><h1 id="readerHeading"></h1></div></div><article class="reader-content" id="readerContent"><div class="loading">Đang mở tài liệu…</div></article></section></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
