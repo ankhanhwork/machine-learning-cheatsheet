@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#f5f6f8" />
     <meta name="description" content="Thư viện tài liệu Advanced Business Analytics: machine learning, feature engineering và notebook thực hành." />
     <title>ML Study Library</title>
+    <link rel="icon" type="image/png" href="/GeeksForGeeks_logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -14,7 +15,7 @@
   <body>
     <div class="shell">
       <aside class="sidebar">
-        <a class="brand" href="#" aria-label="ML Study Library home"><span class="brand-icon">M</span><span>study<span class="brand-light">/ml</span></span></a>
+        <a class="brand" href="#" aria-label="ML Study Library home"><img class="brand-logo" src="/GeeksForGeeks_logo.png" alt="GeeksforGeeks logo" /><span>study<span class="brand-light">/ml</span></span></a>
         <div class="sidebar-label">LIBRARY</div>
         <button class="nav-item active" id="allDocs"><span class="nav-icon">▤</span> Tất cả tài liệu <span class="nav-count" id="docCount">0</span></button>
         <div class="sidebar-label section-label">CHỦ ĐỀ</div>
@@ -23,7 +24,7 @@
       </aside>
 
       <main class="main">
-        <header class="topbar"><div class="breadcrumb"><span>Thư viện</span><span class="crumb-sep">/</span><strong id="crumbCurrent">Tất cả tài liệu</strong></div><a class="github-link" href="https://github.com/ankhanhwork/machine-learning-cheatsheet" target="_blank" rel="noreferrer">GitHub <span>↗</span></a></header>
+        <header class="topbar"><div class="breadcrumb"><span>Thư viện</span><span class="crumb-sep">/</span><strong id="crumbCurrent">Tất cả tài liệu</strong></div><div class="topbar-actions"><a class="github-link" href="https://github.com/ankhanhwork/machine-learning-cheatsheet" target="_blank" rel="noreferrer">GitHub <span>↗</span></a><button class="account-button" id="openChat" type="button"><span class="account-avatar">A</span><span>Tài khoản</span></button></div></header>
         <section class="welcome" id="welcome">
           <div class="eyebrow"><span></span> YOUR PERSONAL KNOWLEDGE BASE</div>
           <h1>Học machine learning,<br /><em>theo cách của bạn.</em></h1>
@@ -38,6 +39,14 @@
           <div class="empty-state" id="emptyState" hidden><div class="empty-icon">⌕</div><h3>Không tìm thấy tài liệu</h3><p>Thử một từ khóa khác hoặc chọn chủ đề khác.</p></div>
         </section>
         <footer>Made for curious minds <span>✳</span><span class="footer-right">ADVANCED BUSINESS ANALYTICS · 2026</span></footer>
+        <section class="chat-page" id="chatPage" hidden aria-label="Trợ lý học tập">
+          <div class="chat-heading"><button class="chat-back" id="closeChat" type="button">← <span>Quay lại thư viện</span></button><button class="chat-clear" id="clearChat" type="button">Xóa lịch sử</button></div>
+          <div class="chat-card"><header class="chat-title"><div class="chat-avatar">✳</div><div><h1>Trợ lý học tập</h1><p>Hỏi đáp cùng trợ lý Advanced Business Analytics</p></div><span class="chat-online"><i></i> Trực tuyến</span></header>
+            <div class="chat-messages" id="chatMessages" aria-live="polite" aria-label="Tin nhắn"></div>
+            <form class="chat-composer" id="chatForm"><label class="sr-only" for="chatInput">Tin nhắn của bạn</label><textarea id="chatInput" rows="1" maxlength="4000" placeholder="Nhập câu hỏi của bạn..." required></textarea><button id="sendChat" type="submit" aria-label="Gửi tin nhắn">↑</button></form>
+            <div class="chat-note">Lịch sử trò chuyện được lưu trên thiết bị này.</div>
+          </div>
+        </section>
       </main>
     </div>
     <div class="reader" id="reader" aria-hidden="true"><div class="reader-backdrop" id="readerBackdrop"></div><section class="reader-panel"><div class="reader-top"><button class="back-button" id="closeReader">← <span>Thư viện</span></button><div class="reader-actions"><a id="downloadLink" class="download-button" download>↓ <span>Tải xuống</span></a><button class="close-button" id="closeIcon" aria-label="Đóng">×</button></div></div><div class="reader-title"><div class="doc-badge" id="readerBadge">MD</div><div><div class="reader-path" id="readerPath"></div><h1 id="readerHeading"></h1></div></div><article class="reader-content" id="readerContent"><div class="loading">Đang mở tài liệu…</div></article></section></div>

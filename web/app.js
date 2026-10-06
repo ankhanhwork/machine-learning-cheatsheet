@@ -5,6 +5,69 @@ const pretty = (name) => name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').rep
 const formatSize = (bytes) => bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 const icon = (type) => ({ ipynb: '◉', md: '▤', pdf: '▧', docx: '▧', py: '‹›', csv: '▦' }[type] || '▤');
 const folderName = (doc) => doc.path.includes('/') ? doc.path.split('/')[0] : 'Tài liệu khác';
+const CHAT_WEBHOOK = 'https://frannie133625.app.n8n.cloud/webhook/9fb21e8a-d1a8-4608-8343-d44f1447b3a5/chat';
+const CHAT_HISTORY_KEY = 'study-ml-chat-history-v1';
+const CHAT_SESSION_KEY = 'study-ml-chat-session-v1';
+let chatMessages = loadChatHistory();
+let chatPending = false;
+
+function loadChatHistory() {
+  try { const value = JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY) || '[]'); return Array.isArray(value) ? value.filter((m) => m && ['user', 'assistant'].includes(m.role) && typeof m.text === 'string') : []; }
+  catch { return []; }
+}
+function saveChatHistory() { try { localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chatMessages)); } catch { showChatError('Không thể lưu lịch sử trên thiết bị này.'); } }
+function getChatSession() {
+  let id = localStorage.getItem(CHAT_SESSION_KEY);
+  if (!id) { id = globalThis.crypto?.randomUUID?.() || `session-${Date.now()}-${Math.random().toString(36).slice(2)}`; localStorage.setItem(CHAT_SESSION_KEY, id); }
+  return id;
+}
+function drawChat() {
+  const container = $('chatMessages');
+  if (!container) return;
+  if (!chatMessages.length) container.innerHTML = '<div class="chat-welcome"><span>✳</span><h2>Bắt đầu cuộc trò chuyện</h2><p>Bạn đang học chủ đề nào? Hãy gửi câu hỏi để bắt đầu nhé.</p></div>';
+  else { container.innerHTML = ''; for (const message of chatMessages) { const bubble = document.createElement('div'); bubble.className = `chat-message ${message.role}`; bubble.textContent = message.text; container.appendChild(bubble); } }
+  container.scrollTop = container.scrollHeight;
+}
+function showChatError(text) {
+  let error = $('chatError');
+  if (!error) { error = document.createElement('p'); error.id = 'chatError'; error.className = 'chat-error'; $('chatForm').before(error); }
+  error.textContent = text;
+}
+function responseText(data) {
+  if (typeof data === 'string') return data;
+  if (Array.isArray(data)) return data.map(responseText).filter(Boolean).join('\n');
+  if (data && typeof data === 'object') for (const key of ['output', 'text', 'response', 'message', 'answer']) {
+    if (typeof data[key] === 'string') return data[key];
+    if (data[key] && typeof data[key] === 'object') { const nested = responseText(data[key]); if (nested) return nested; }
+  }
+  return '';
+}
+function openChatPage(fromHistory = false) {
+  $('welcome').hidden = true; document.querySelector('.content-section').hidden = true; document.querySelector('footer').hidden = true;
+  $('chatPage').hidden = false; $('crumbCurrent').textContent = 'Trợ lý học tập';
+  if (!fromHistory) history.pushState({ chat: true }, '', `${location.pathname}?view=chat`);
+  drawChat(); if (!fromHistory) $('chatInput').focus();
+}
+function closeChatPage(updateHistory = true) {
+  $('chatPage').hidden = true; document.querySelector('.content-section').hidden = false; document.querySelector('footer').hidden = false;
+  $('welcome').hidden = state.folder !== 'all'; $('crumbCurrent').textContent = state.folder === 'all' ? 'Tất cả tài liệu' : state.folder;
+  if (updateHistory && new URLSearchParams(location.search).has('view')) history.replaceState({}, '', location.pathname);
+}
+async function sendChatMessage(text) {
+  if (chatPending) return;
+  chatPending = true; $('sendChat').disabled = true; $('chatInput').disabled = true;
+  const error = $('chatError'); if (error) error.remove();
+  chatMessages.push({ role: 'user', text }); saveChatHistory(); drawChat();
+  const pending = document.createElement('div'); pending.className = 'chat-message assistant chat-typing'; pending.textContent = 'Đang soạn câu trả lời…'; $('chatMessages').appendChild(pending); $('chatMessages').scrollTop = $('chatMessages').scrollHeight;
+  try {
+    const response = await fetch(CHAT_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json, text/plain' }, body: JSON.stringify({ action: 'sendMessage', sessionId: getChatSession(), chatInput: text }) });
+    const raw = await response.text(); if (!response.ok) throw new Error(`Webhook trả về lỗi ${response.status}.`);
+    let data = raw; try { data = JSON.parse(raw); } catch { /* webhook may return plain text */ }
+    const answer = responseText(data).trim(); if (!answer) throw new Error('Webhook chưa trả về nội dung câu trả lời.');
+    chatMessages.push({ role: 'assistant', text: answer }); saveChatHistory();
+  } catch (error) { chatMessages.push({ role: 'assistant', text: `Mình chưa kết nối được với trợ lý. ${error.message || 'Vui lòng thử lại.'}` }); saveChatHistory(); }
+  finally { chatPending = false; $('sendChat').disabled = false; $('chatInput').disabled = false; drawChat(); $('chatInput').focus(); }
+}
 
 async function start() {
   try {
@@ -116,5 +179,11 @@ $('allDocs').addEventListener('click', () => setFolder('all'));
 $('searchInput').addEventListener('input', (e) => { state.query = e.target.value; drawDocs(); });
 $('typeFilter').addEventListener('change', (e) => { state.type = e.target.value; drawDocs(); });
 $('closeReader').addEventListener('click', closeReader); $('closeIcon').addEventListener('click', closeReader); $('readerBackdrop').addEventListener('click', closeReader);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); $('searchInput').focus(); } });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeReader(); if (!$('chatPage').hidden) closeChatPage(); } if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); $('searchInput').focus(); } });
+$('openChat').addEventListener('click', () => openChatPage());
+$('closeChat').addEventListener('click', () => closeChatPage());
+$('clearChat').addEventListener('click', () => { chatMessages = []; localStorage.removeItem(CHAT_HISTORY_KEY); localStorage.removeItem(CHAT_SESSION_KEY); drawChat(); });
+$('chatForm').addEventListener('submit', (event) => { event.preventDefault(); const input = $('chatInput'); const text = input.value.trim(); if (!text) return; input.value = ''; sendChatMessage(text); });
+window.addEventListener('popstate', () => { if (new URLSearchParams(location.search).get('view') === 'chat') openChatPage(true); else if (!$('chatPage').hidden) closeChatPage(false); });
+if (new URLSearchParams(location.search).get('view') === 'chat') openChatPage(true);
 start();
