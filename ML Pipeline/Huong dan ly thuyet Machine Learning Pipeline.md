@@ -2,6 +2,8 @@
 
 > Tài liệu này giải thích notebook `Machine Learning Pipeline for Binary Target.ipynb` theo thứ tự quy trình. Notebook là khung thực hành: một số ô là mặc định, một số là ví dụ tùy chọn cần đổi tên cột hoặc bỏ comment trước khi chạy. Các giá trị tham số nêu dưới đây là cấu hình được viết trong notebook, không phải “đáp án tốt nhất” cho mọi dữ liệu.
 
+ankhanhnguyen2305@gmail.com - Ankhanh2305$ - HuggingFace
+
 ## Mục lục
 
 1. [Bức tranh toàn cảnh](#1-bức-tranh-toàn-cảnh)
