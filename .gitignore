@@ -2,3 +2,5 @@ generator/
 dist/
 .vercel/
 .docx-render/
+.venv/
+ML Pipeline/test/LC_loans_granting_model_dataset.csv
