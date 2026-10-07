@@ -41,6 +41,8 @@ predictions = model.predict(X_test)
 | Chọn thuật toán và fit | [05_Model_Training.md](05_Model_Training.md) | baseline, classification, regression |
 | Đánh giá và tuning | [06_Evaluation_And_Tuning.md](06_Evaluation_And_Tuning.md) | metrics, `GridSearchCV`, threshold |
 | Dự đoán dữ liệu mới và lưu mô hình | [07_Prediction_And_Persistence.md](07_Prediction_And_Persistence.md) | `predict`, xác suất, joblib, checklist |
+| Chạy và đọc notebook random split | [08_Notebook_Random_Split_Guide.md](08_Notebook_Random_Split_Guide.md) | giải thích cell, thuật toán, cách chạy |
+| Chạy và đọc notebook time split | [09_Notebook_Time_Split_Guide.md](09_Notebook_Time_Split_Guide.md) | chia thời gian, forward CV, cách chạy |
 
 ## Quy tắc quan trọng
 
