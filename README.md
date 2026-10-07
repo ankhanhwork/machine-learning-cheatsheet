@@ -65,3 +65,5 @@ https://scikit-learn.org/stable/unsupervised_learning.html
 Chuẩn bị website có thể vào AI ít người biết: 
 https://t3.chat/
 https://v0.app/
+https://huggingface.co/chat/
+https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash
